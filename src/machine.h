@@ -62,12 +62,12 @@ enum vm_status vm_machine_exec(struct machine* vm) {
 
             case INSTRUCTION_SUB: {        
                 i32 dest   = vm->unit->reg[instruction.destination];
-                vm_memory_push(vm->mem, dest - instruction.immediate);
+                vm->unit->reg[instruction.destination] = dest - instruction.immediate;
             } break;
 
             case INSTRUCTION_ADD: {        
                 i32 dest   = vm->unit->reg[instruction.destination];
-                vm_memory_push(vm->mem, dest + instruction.immediate);
+                vm->unit->reg[instruction.destination] = dest + instruction.immediate;
             } break;
         };
     };
