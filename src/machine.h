@@ -9,6 +9,8 @@
 #include "memory.h"
 #include "status.h"
 
+#include "text.h"
+
 typedef struct machine {
     struct cpu* unit;
     struct memory* mem;
@@ -36,9 +38,10 @@ enum vm_status vm_machine_exec(struct machine* vm) {
         return VM_ERROR_NOT_INITIALIZED;
     }
 
-    struct cpu_instruction instruction;
+    struct vm_cpu_instruction instruction;
     while(vm_cpu_next(vm->unit, &instruction) == VM_OK) {
         //i32 source = vm->unit->reg[instruction.source];
+        vm_print_instruction(instruction);
 
         switch(instruction.operation) {
             case INSTRUCTION_HALT: {
@@ -54,17 +57,28 @@ enum vm_status vm_machine_exec(struct machine* vm) {
             } break;
 
             case INSTRUCTION_PUSH: {
-                vm_memory_push(vm->mem, instruction.destination);
+                vm_memory_push(vm->mem, vm->unit->reg[instruction.destination]);
+                
+                vm_print_memory(vm->mem);
             } break;
 
             case INSTRUCTION_SUB: {        
-                i32 dest   = vm->unit->reg[instruction.destination];
+                u32 dest   = vm->unit->reg[instruction.destination];
                 vm->unit->reg[instruction.destination] = dest - instruction.immediate;
             } break;
 
             case INSTRUCTION_ADD: {        
-                i32 dest   = vm->unit->reg[instruction.destination];
+                u32 dest   = vm->unit->reg[instruction.destination];
                 vm->unit->reg[instruction.destination] = dest + instruction.immediate;
+
+                /**
+                 * if(construction.flags & CPU_REG_FLAG_FLOATING) {
+                 *      f32 v = utof_ieee754(vm->unit->reg[instruction.destination]);
+                 *      v = v + instruction.immediate;
+                 *      
+                 *      vm->unit->reg[instruction.destination] = ftou_ieee754(v);
+                 * }
+                 */
             } break;
         };
     };
