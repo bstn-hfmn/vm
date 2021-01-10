@@ -50,10 +50,7 @@ enum vm_status vm_machine_exec(struct machine* vm) {
             } break;
 
             case INSTRUCTION_POP: {
-                u64 value;
-                vm_memory_pop(vm->mem, &value);
-
-                vm->unit->reg[instruction.destination] = value;
+                vm_memory_pop(vm->mem, &vm->unit->reg[instruction.destination]);
             } break;
 
             case INSTRUCTION_PUSH: {

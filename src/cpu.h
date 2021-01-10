@@ -24,7 +24,7 @@ typedef struct cpu {
     u16 size;
     u32* program;
 
-    i32 reg[REGISTERS];
+    u32 reg[REGISTERS];
 } cpu_t, *cpu_ptr;
 
 enum vm_status vm_cpu_create(struct cpu** dst) {

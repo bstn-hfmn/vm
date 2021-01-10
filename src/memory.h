@@ -8,7 +8,7 @@
 #include "status.h"
 
 typedef struct memory {
-    u64* stack;
+    u32* stack;
 
     u16 top;
     u16 size;
@@ -20,12 +20,12 @@ enum vm_status vm_memory_create(struct memory** dst, u16 size) {
     (*dst)->top  = 0;
     (*dst)->size = size;
     
-    (*dst)->stack  = (u64*)malloc(sizeof(u64) * size);
+    (*dst)->stack  = (u32*)malloc(sizeof(u32) * size);
 
     return VM_OK;
 }
 
-enum vm_status vm_memory_push(struct memory* mem, u64 val) {
+enum vm_status vm_memory_push(struct memory* mem, u32 val) {
     if(mem->top == mem->size - 1)
         return VM_ERROR_STACK_OVERFLOW;
 
@@ -33,7 +33,7 @@ enum vm_status vm_memory_push(struct memory* mem, u64 val) {
     return VM_OK;
 }
 
-enum vm_status vm_memory_pop(struct memory* mem, u64* out) {
+enum vm_status vm_memory_pop(struct memory* mem, u32* out) {
     if(mem->top == ZERO)
         return VM_ERROR_SEGMENTATION_FAULT;
     
@@ -41,7 +41,7 @@ enum vm_status vm_memory_pop(struct memory* mem, u64* out) {
     return VM_OK;
 }
 
-enum vm_status vm_memory_value(struct memory* mem, u32 address, u64* val) {
+enum vm_status vm_memory_value(struct memory* mem, u32 address, u32* val) {
     if(address == mem->size - 1)
         return VM_ERROR_SEGMENTATION_FAULT;
     
